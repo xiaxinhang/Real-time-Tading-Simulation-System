@@ -6,13 +6,15 @@ A demo-first financial backend built with FastAPI + WebSocket + Redis.
 - Real-time market simulation for 5 symbols
 - WebSocket market snapshot push (`/ws/market`)
 - Redis high-concurrency cache for market and trade data
-- Market-order trading API
+- Market and limit order trading API
+- Domain-level order book, matching engine, and trade event stream
 - User and market analytics API
 
 ## Project Structure
 - `app/main.py`: FastAPI entry and lifecycle
+- `app/domain/`: exchange domain primitives (`Order`, `OrderBook`, `MatchingEngine`, `TradeEvent`)
 - `app/service/market.py`: market tick generator
-- `app/service/trade.py`: order execution and account state
+- `app/service/trade.py`: trading application service, risk checks, account state, event persistence
 - `app/service/analysis.py`: analytics metrics
 - `app/websocket/market_ws.py`: WS manager and endpoint
 - `app/core/redis_client.py`: async Redis client
@@ -34,18 +36,28 @@ uvicorn app.main:app --reload
 - `GET /api/market/snapshot`
 - `POST /api/order`
 - `GET /api/order/{order_id}`
+- `GET /api/orderbook/{symbol}`
 - `GET /api/user/{user_id}/portfolio`
 - `GET /api/user/{user_id}/analysis`
 - `GET /api/market/analysis`
 - `WS /ws/market`
 
 ## Order Example
+Market order:
 ```bash
 curl -X POST http://127.0.0.1:8000/api/order \
   -H "Content-Type: application/json" \
-  -d '{"user_id":"u001","symbol":"AAPL","side":"buy","quantity":10}'
+  -d '{"user_id":"u001","symbol":"AAPL","side":"buy","quantity":10,"order_type":"market"}'
+```
+
+Limit order:
+```bash
+curl -X POST http://127.0.0.1:8000/api/order \
+  -H "Content-Type: application/json" \
+  -d '{"user_id":"u001","symbol":"AAPL","side":"buy","quantity":10,"order_type":"limit","limit_price":180.50}'
 ```
 
 ## Notes
 - This version keeps user account state in memory and uses Redis for cache/history.
 - If Redis is unavailable, core service still runs with degraded cache persistence.
+- Simulated market-maker liquidity is seeded per symbol so learning/demo market orders can execute while still passing through the matching engine.

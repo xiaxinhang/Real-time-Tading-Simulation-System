@@ -3,9 +3,11 @@ from __future__ import annotations
 import os
 import sys
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 # Allow running this file directly: `python app/main.py`.
 if __package__ is None or __package__ == "":
@@ -17,6 +19,7 @@ from app.api.order import router as order_router
 from app.api.user import router as user_router
 from app.core.redis_client import redis_client
 from app.service.market import market_service
+from app.service.trade import trade_service
 from app.websocket.market_ws import manager, router as ws_router
 
 
@@ -24,6 +27,7 @@ from app.websocket.market_ws import manager, router as ws_router
 async def lifespan(_: FastAPI):
     await redis_client.connect()
     market_service.set_broadcast_handler(manager.broadcast)
+    trade_service.set_broadcast_handler(manager.broadcast)
     await market_service.start()
     try:
         yield
@@ -66,3 +70,8 @@ async def system_status() -> dict:
 @app.get("/api/market/snapshot")
 async def market_snapshot() -> dict:
     return market_service.get_latest_snapshot()
+
+
+frontend_dist = Path(__file__).resolve().parent.parent / "frontend" / "dist"
+if frontend_dist.exists():
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")

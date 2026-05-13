@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from app.models.models import OrderResponse, PlaceOrderRequest, PortfolioResponse
+from app.models.models import OrderBookResponse, OrderResponse, PlaceOrderRequest, PortfolioResponse
 from app.service.trade import trade_service
 
 router = APIRouter(prefix="/api", tags=["trade"])
@@ -16,6 +16,11 @@ async def place_order(payload: PlaceOrderRequest) -> OrderResponse:
 @router.get("/order/{order_id}", response_model=OrderResponse)
 async def get_order(order_id: str) -> OrderResponse:
     return trade_service.get_order(order_id)
+
+
+@router.get("/orderbook/{symbol}", response_model=OrderBookResponse)
+async def get_order_book(symbol: str, depth: int = 10) -> dict:
+    return trade_service.get_order_book(symbol, depth=depth)
 
 
 @router.get("/user/{user_id}/portfolio", response_model=PortfolioResponse)

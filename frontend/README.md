@@ -1,25 +1,38 @@
-﻿# Frontend Tester
+﻿# Trading Simulation Dashboard
 
-这是一个用于联调后端的轻量前端测试页（无 Node 依赖）。
+Vue 3 dashboard for the real-time trading simulation backend.
 
-## 启动方式
-在项目根目录执行：
+## Stack
+- Vue 3
+- Vite
+- Native WebSocket client
+- Decoupled HTTP API layer
+
+## Local Development
 
 ```powershell
-# 启动后端
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
-
-# 新开终端启动前端静态服务
-.\.venv\Scripts\python.exe -m http.server 5500 --directory frontend
+cd frontend
+npm install
+npm run dev
 ```
 
-浏览器打开：
-`http://127.0.0.1:5500`
+Open:
+`http://127.0.0.1:5173`
 
-## 可测功能
-- 后端健康检查
-- WebSocket 实时行情展示
-- 下单（buy/sell）
-- 持仓查询
-- 用户分析与市场分析查询
+Backend defaults:
+- HTTP API: `http://127.0.0.1:8000`
+- WebSocket: `ws://127.0.0.1:8000/ws/market`
 
+Override with a local `.env` file:
+
+```env
+VITE_API_BASE=http://127.0.0.1:8000
+VITE_WS_BASE=ws://127.0.0.1:8000
+```
+
+## Dashboard Modules
+- Live market tape from WebSocket snapshots
+- Market/limit order ticket
+- Price-time priority order book panel
+- Trade event stream from WebSocket `trade_events`
+- Portfolio and analytics console
