@@ -1,0 +1,73 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trading Simulation Tester</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Trading Simulation Tester</h1>
+      <p class="hint">后端默认: <code>http://127.0.0.1:8000</code></p>
+
+      <section class="card">
+        <h2>连接设置</h2>
+        <div class="row">
+          <label>API Base</label>
+          <input id="apiBase" value="http://127.0.0.1:8000" />
+          <button id="saveBase">保存</button>
+          <button id="checkHealth">健康检查</button>
+        </div>
+        <pre id="healthResult">未检测</pre>
+      </section>
+
+      <section class="card">
+        <h2>实时行情 (WebSocket)</h2>
+        <div class="row">
+          <button id="connectWs">连接 WS</button>
+          <button id="disconnectWs">断开 WS</button>
+          <span id="wsStatus">未连接</span>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Symbol</th><th>Price</th><th>Change%</th><th>Volume</th><th>TS</th></tr>
+          </thead>
+          <tbody id="marketTable"></tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>下单</h2>
+        <div class="grid">
+          <label>User ID<input id="userId" value="u001" /></label>
+          <label>Symbol<input id="symbol" value="AAPL" /></label>
+          <label>Side
+            <select id="side">
+              <option value="buy">buy</option>
+              <option value="sell">sell</option>
+            </select>
+          </label>
+          <label>Quantity<input id="qty" type="number" min="1" value="10" /></label>
+        </div>
+        <button id="placeOrder">提交订单</button>
+        <pre id="orderResult">暂无</pre>
+      </section>
+
+      <section class="card">
+        <h2>账户与分析</h2>
+        <div class="row">
+          <button id="loadPortfolio">查持仓</button>
+          <button id="loadUserAnalysis">查用户分析</button>
+          <button id="loadMarketAnalysis">查市场分析</button>
+        </div>
+        <pre id="portfolioResult">暂无</pre>
+        <pre id="userAnalysisResult">暂无</pre>
+        <pre id="marketAnalysisResult">暂无</pre>
+      </section>
+    </div>
+
+    <script src="./src/app.js"></script>
+  </body>
+</html>
+
