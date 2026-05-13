@@ -3,8 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>Trading Simulation Tester</title>
-    <link rel="stylesheet" href="./src/style.css" />
+    <link rel="stylesheet" href="./src/style.css?v=5" />
   </head>
   <body>
     <div class="container">
@@ -19,7 +22,7 @@
           <button id="saveBase">保存</button>
           <button id="checkHealth">健康检查</button>
         </div>
-        <pre id="healthResult">未检测</pre>
+        <div id="healthResult" class="status-panel muted">未检测</div>
       </section>
 
       <section class="card">
@@ -51,23 +54,21 @@
           <label>Quantity<input id="qty" type="number" min="1" value="10" /></label>
         </div>
         <button id="placeOrder">提交订单</button>
-        <pre id="orderResult">暂无</pre>
+        <div id="orderResult" class="empty-state">暂无订单</div>
       </section>
 
       <section class="card">
         <h2>账户与分析</h2>
-        <div class="row">
-          <button id="loadPortfolio">查持仓</button>
-          <button id="loadUserAnalysis">查用户分析</button>
-          <button id="loadMarketAnalysis">查市场分析</button>
+        <div class="row tab-row">
+          <button id="loadPortfolio" class="tab-button active">查持仓</button>
+          <button id="loadUserAnalysis" class="tab-button">查用户分析</button>
+          <button id="loadMarketAnalysis" class="tab-button">查市场分析</button>
         </div>
-        <pre id="portfolioResult">暂无</pre>
-        <pre id="userAnalysisResult">暂无</pre>
-        <pre id="marketAnalysisResult">暂无</pre>
+        <div id="accountPanel" class="empty-state">暂无账户数据</div>
       </section>
     </div>
 
-    <script src="./src/app.js"></script>
+    <script src="./src/app.js?v=5"></script>
   </body>
 </html>
 
