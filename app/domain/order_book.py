@@ -29,6 +29,18 @@ class OrderBook:
         side.setdefault(order.limit_price, deque()).append(order)
         order.status = OrderStatus.OPEN
 
+    def cancel(self, order_id: str) -> Order | None:
+        for book in (self._bids, self._asks):
+            for price, queue in list(book.items()):
+                for order in list(queue):
+                    if order.order_id == order_id and order.remaining_quantity > 0:
+                        order.status = OrderStatus.CANCELLED
+                        queue.remove(order)
+                        if not queue:
+                            del book[price]
+                        return order
+        return None
+
     def best_bid(self) -> Order | None:
         return self._best(self._bids, reverse=True)
 

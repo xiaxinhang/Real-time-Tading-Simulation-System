@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { computed } from "vue";
 import { formatMoney, formatNumber } from "../utils";
 
@@ -32,6 +32,6 @@ const rows = computed(() => {
         <span>{{ row.ask ? formatNumber(row.ask.quantity) : '-' }}</span>
       </div>
     </div>
-    <div v-else class="empty">暂无挂单流动性。等待行情到达后提交订单或刷新。</div>
+    <div v-else class="empty">暂无挂单流动性。等待行情到达后提交限价单或刷新。</div>
   </section>
 </template>

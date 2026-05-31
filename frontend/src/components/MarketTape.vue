@@ -1,11 +1,30 @@
-<script setup>
+﻿<script setup>
 import { computed } from "vue";
 import { formatMoney, formatNumber, formatTime } from "../utils";
 
-const props = defineProps({ ticks: { type: Array, default: () => [] }, selectedSymbol: String });
-const emit = defineEmits(["select-symbol"]);
+const props = defineProps({
+  ticks: { type: Array, default: () => [] },
+  selectedSymbol: String,
+  refreshingMarket: Boolean,
+  marketStatus: Object,
+});
+const emit = defineEmits(["select-symbol", "refresh-real"]);
 
 const sortedTicks = computed(() => [...props.ticks].sort((a, b) => a.symbol.localeCompare(b.symbol)));
+
+const lastPullLabel = computed(() => {
+  const ts = props.marketStatus?.last_successful_pull_ts;
+  return ts ? formatTime(ts) : "暂无";
+});
+
+const sourceLabel = computed(() => {
+  const source = props.marketStatus?.market_data_source || "unknown";
+  if (source === "real_yahoo") return "Yahoo";
+  if (source === "real_stooq") return "Stooq";
+  if (source === "fallback_cache") return "缓存";
+  if (source === "unavailable") return "不可用";
+  return "等待";
+});
 </script>
 
 <template>
@@ -15,7 +34,14 @@ const sortedTicks = computed(() => [...props.ticks].sort((a, b) => a.symbol.loca
         <p class="eyebrow">实时 WebSocket</p>
         <h2>市场行情</h2>
       </div>
-      <span class="subtle">{{ sortedTicks.length }} 个股票代码</span>
+      <div class="row">
+        <span class="subtle market-meta">{{ sortedTicks.length }} 个股票代码</span>
+        <span class="subtle market-meta">来源：{{ sourceLabel }}</span>
+        <span class="subtle market-meta">上次成功：{{ lastPullLabel }}</span>
+        <button class="refresh-real-btn" :disabled="refreshingMarket" @click="emit('refresh-real')">
+          {{ refreshingMarket ? "拉取中..." : "重新拉取真实数据" }}
+        </button>
+      </div>
     </div>
 
     <div class="table-shell">

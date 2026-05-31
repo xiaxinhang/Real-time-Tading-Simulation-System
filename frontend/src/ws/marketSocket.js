@@ -7,6 +7,7 @@ const state = reactive({
   lastMessageAt: null,
   reconnectAttempts: 0,
   ticks: [],
+  marketStatus: null,
   tradeEvents: [],
   latestOrder: null,
   error: "",
@@ -32,6 +33,14 @@ function handleMessage(event) {
 
   if (message.type === "snapshot" && Array.isArray(message.data)) {
     state.ticks = message.data;
+    state.marketStatus = {
+      market_data_source: message.market_data_source,
+      market_data_error: message.market_data_error,
+      last_successful_pull_ts: message.last_successful_pull_ts,
+      market_data_stale: message.market_data_stale,
+      max_data_age_ms: message.max_data_age_ms,
+      refresh_interval: message.refresh_interval,
+    };
     return;
   }
 

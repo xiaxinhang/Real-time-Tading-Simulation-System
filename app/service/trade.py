@@ -72,12 +72,7 @@ class TradeService:
         return response
 
     def _reference_price(self, symbol: str) -> float:
-        snapshot = market_service.get_latest_snapshot()
-        ticks = {item["symbol"]: item for item in snapshot.get("data", [])}
-        tick = ticks.get(symbol)
-        if tick is None:
-            raise HTTPException(status_code=400, detail=f"No market price for symbol={symbol}")
-        return float(tick["price"])
+        return market_service.reference_price(symbol)
 
     def _seed_liquidity(self, symbol: str, reference_price: float) -> None:
         if symbol in self._liquidity_seeded:

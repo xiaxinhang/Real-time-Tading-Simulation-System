@@ -102,6 +102,9 @@ class MatchingEngine:
     def book_snapshot(self, symbol: str, depth: int = 10) -> dict:
         return self._book(symbol).snapshot(depth=depth)
 
+    def cancel(self, symbol: str, order_id: str) -> Order | None:
+        return self._book(symbol).cancel(order_id)
+
     def _book(self, symbol: str) -> OrderBook:
         normalized = symbol.upper()
         if normalized not in self._books:
