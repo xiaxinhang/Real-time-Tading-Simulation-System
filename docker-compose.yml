@@ -9,9 +9,8 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     environment:
-      DATABASE_URL: sqlite:////app/data/trading_sim.db
-      MARKET_DATA_MODE: sim
-      MARKET_TICK_INTERVAL: "1"
+      DATABASE_URL: sqlite:////app/data/trading.db
+      MARKET_REFRESH_INTERVAL: "30"
       STRATEGY_TICK_INTERVAL: "5"
       REDIS_URL: redis://redis:6379/0
       SERVE_FRONTEND_DIST: "0"

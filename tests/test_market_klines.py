@@ -2,12 +2,15 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
+from app.db.database import init_db
 from app.main import app
 from app.models.models import MarketTick
 from app.service.market import market_service
 
 
 def test_manual_market_refresh_can_generate_klines(monkeypatch) -> None:
+    init_db()
+
     async def fake_real_ticks() -> tuple[list[MarketTick], str]:
         return (
             [MarketTick(symbol="AAPL", price=180.0, change=0.0, volume=1000, ts=1_800_000_000_000)],

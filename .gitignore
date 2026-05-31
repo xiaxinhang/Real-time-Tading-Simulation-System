@@ -5,4 +5,5 @@ frontend/node_modules/
 frontend/dist/
 frontend/.npm-cache/
 *.log
+trading.db
 trading_sim.db

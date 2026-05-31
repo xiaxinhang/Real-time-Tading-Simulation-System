@@ -2,10 +2,12 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
+from app.db.database import init_db
 from app.main import app
 
 
 def test_register_creates_token_account_and_cashflow() -> None:
+    init_db()
     client = TestClient(app)
     username = "pytest_user_auth_account"
 

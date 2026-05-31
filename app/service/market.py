@@ -31,7 +31,7 @@ def _bounded_seconds(raw: str | None, default: float, minimum: float, maximum: f
 class MarketService:
     def __init__(self) -> None:
         self.symbols = ["AAPL", "MSFT", "TSLA", "NVDA", "AMZN"]
-        raw_interval = os.getenv("MARKET_REFRESH_INTERVAL", os.getenv("MARKET_TICK_INTERVAL"))
+        raw_interval = os.getenv("MARKET_REFRESH_INTERVAL")
         self.refresh_interval = _bounded_seconds(raw_interval, default=30.0, minimum=30.0, maximum=60.0)
         self.tick_interval = self.refresh_interval
         self.market_data_timeout = float(os.getenv("MARKET_DATA_TIMEOUT", "5.0"))
